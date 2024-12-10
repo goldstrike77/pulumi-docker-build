@@ -1,0 +1,28 @@
+name: Publish Image
+
+on:
+  push:
+
+env:
+ DOCKER_CR: registry.cn-hangzhou.aliyuncs.com
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.DOCKER_CR }}
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASS }}
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: Build and push Docker image
+        run: |
+          docker build --build-arg VERSION=${{ steps.extract_branch.outputs.branch }} . --file Dockerfile --tag ${{ env.DOCKER_CR }}/goldenimage/pulumi:${{ steps.extract_branch.outputs.branch }}
+          docker push ${{ env.DOCKER_CR }}/goldenimage/pulumi:${{ steps.extract_branch.outputs.branch }}

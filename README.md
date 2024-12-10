@@ -1,1 +1,1 @@
-# pulumi-docker-build
+## 用于构建 Pulumi 镜像并推送到容器镜像仓库.
