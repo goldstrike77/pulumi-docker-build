@@ -1,11 +1,11 @@
-ARG VERSION
-
 FROM debian:bookworm-slim AS builder
 RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debian.sources && \
   DEBIAN_FRONTEND=noninteractive apt-get update && \
   apt-get install -y curl build-essential git && \
   rm -rf /var/lib/apt/lists/* && \
   apt-get clean
+
+ARG VERSION
 
 # Install the Pulumi SDK, including the CLI and language runtimes.
 RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version ${VERSION}
