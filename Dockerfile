@@ -8,7 +8,7 @@ RUN sed -i 's|deb.debian.org|mirrors.aliyun.com|g' /etc/apt/sources.list.d/debia
   apt-get clean
 
 # Install the Pulumi SDK, including the CLI and language runtimes.
-RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version $VERSION
+RUN curl -fsSL https://get.pulumi.com/ | bash -s -- --version "$VERSION"
 
 # The runtime container
 FROM node:18.20.5-bookworm-slim
